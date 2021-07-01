@@ -1,0 +1,22 @@
+{
+  // デフォルトのフォーマッターをVSCodeのPrettierに設定
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // セーブした時にフォーマット
+  "editor.formatOnSave": true,
+  // ペーストした時にフォーマット
+  "editor.formatOnPaste": true,
+  // import文を相対パスにする
+  "javascript.preferences.importModuleSpecifier": "relative",
+  // セミコロンは禁止
+  "prettier.semi": false,
+  // printWidth: 120
+  "prettier.printWidth": 120,
+  // trailingCommaは全部につける
+  "prettier.trailingComma": "all",
+  // Tabは2つのスペース
+  "editor.tabSize": 2,
+  // wakanne
+  "files.autoSave": "afterDelay",
+  // viewportで折り返す
+  "editor.wordWrap": "on",
+}
