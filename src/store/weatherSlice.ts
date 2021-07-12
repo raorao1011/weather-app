@@ -27,6 +27,7 @@ export const weatherSlice = createSlice({
 export const { changeFlag, setWeatherData } = weatherSlice.actions;
 
 export const selectWeatherData = (state: RootState): WeatherStateType["weatherData"] => state.weather.weatherData;
+export const selectChangeFlag = (state: RootState): WeatherStateType["flag"] => state.weather.flag;
 
 // store.tsのweatherReducerになる
 export default weatherSlice.reducer;
