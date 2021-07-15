@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { WeatherJSON } from "src/types/weather";
 import { RootState } from "./store";
 
 type WeatherStateType = {
   flag: boolean;
-  weatherData: any;
+  weatherData: WeatherJSON | null;
 };
 
 const initialState: WeatherStateType = {
