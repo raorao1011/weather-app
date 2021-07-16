@@ -25,7 +25,7 @@ export const geolocationSlice = createSlice({
   },
 });
 
-export const { setCoordinate } = geolocationSlice.actions
+export const { setCoordinate } = geolocationSlice.actions;
 
 export const selectCoordinate = (state: RootState): GeolocationData["coordinate"] => state.geolocation.coordinate;
 
