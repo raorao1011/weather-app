@@ -3,8 +3,8 @@ import { RootState } from "./store";
 
 type GeolocationData = {
   coordinate: {
-    lat: number;
-    lng: number;
+    lat: number | null;
+    lng: number | null;
   };
   hasCoordinate: boolean;
 };
@@ -12,8 +12,8 @@ type GeolocationData = {
 const initialState: GeolocationData = {
   // 初期値；東京駅
   coordinate: {
-    lat: 35.6809591,
-    lng: 139.7673068,
+    lat: null,
+    lng: null,
   },
   hasCoordinate: false,
 };
