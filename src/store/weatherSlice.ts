@@ -3,33 +3,33 @@ import { WeatherJSON } from "src/types/weather";
 import { RootState } from "./store";
 
 type WeatherStateType = {
-  flag: boolean;
   weatherData: WeatherJSON | null;
+  hasWeatherData: boolean;
 };
 
 const initialState: WeatherStateType = {
-  flag: false,
   weatherData: null,
+  hasWeatherData: false,
 };
 
 export const weatherSlice = createSlice({
   name: "weather",
   initialState,
   reducers: {
-    changeFlag: (state, action) => {
-      state.flag = action.payload
-    },
     setWeatherData: (state, action) => {
-      state.weatherData = action.payload
-    }
+      state.weatherData = action.payload;
+    },
+    setHasWeatherData: (state, action) => {
+      state.hasWeatherData = action.payload;
+    },
   },
 });
 
-export const { changeFlag, setWeatherData } = weatherSlice.actions;
+export const { setWeatherData, setHasWeatherData } = weatherSlice.actions;
 
 export const selectWeatherData = (state: RootState): WeatherStateType["weatherData"] => state.weather.weatherData;
-export const selectChangeFlag = (state: RootState): WeatherStateType["flag"] => state.weather.flag;
+export const selectHasWeatherData = (state: RootState): WeatherStateType["hasWeatherData"] =>
+  state.weather.hasWeatherData;
 
 // store.tsのweatherReducerになる
 export default weatherSlice.reducer;
-
