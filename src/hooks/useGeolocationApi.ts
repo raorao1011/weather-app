@@ -4,9 +4,7 @@ import { selectCoordinate, setCoordinate, setIsEnableGeo } from "src/store/geolo
 import { Position } from "../types/geolocation";
 
 export const useGeolocation = () => {
-  const [hasCoords, sethasCoords] = useState();
   const dispatch = useDispatch();
-  const position = useSelector(selectCoordinate);
 
   // ユーザの位置情報を取得
   const fetchGeolocationData = useCallback(async () => {
@@ -17,14 +15,13 @@ export const useGeolocation = () => {
       return;
     }
 
-    new Promise((resolve) => {
-      navigator.geolocation.getCurrentPosition((p) => {
-        const coordinate: Position = {
-          lat: p.coords.latitude,
-          lng: p.coords.longitude,
-        };
-        resolve(dispatch(setCoordinate(coordinate)));
-      });
+    navigator.geolocation.getCurrentPosition((p) => {
+      const coordinate: Position = {
+        lat: p.coords.latitude,
+        lng: p.coords.longitude,
+      };
+      console.log(coordinate);
+      dispatch(setCoordinate(coordinate));
     });
   }, []);
 
