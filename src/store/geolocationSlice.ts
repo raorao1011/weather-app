@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 
 type GeolocationData = {
@@ -6,16 +6,15 @@ type GeolocationData = {
     lat: number | null;
     lng: number | null;
   };
-  hasCoordinate: boolean;
+  isEnableGeo: boolean | null;
 };
 
 const initialState: GeolocationData = {
-  // 初期値；東京駅
   coordinate: {
     lat: null,
     lng: null,
   },
-  hasCoordinate: false,
+  isEnableGeo: null,
 };
 
 export const geolocationSlice = createSlice({
@@ -25,16 +24,15 @@ export const geolocationSlice = createSlice({
     setCoordinate: (state, action) => {
       state.coordinate = action.payload;
     },
-    hasCoordinate: (state, action) => {
-      state.hasCoordinate = action.payload;
+    setIsEnableGeo: (state, action) => {
+      state.isEnableGeo = action.payload;
     },
   },
 });
 
-export const { setCoordinate, hasCoordinate } = geolocationSlice.actions;
+export const { setCoordinate, setIsEnableGeo } = geolocationSlice.actions;
 
 export const selectCoordinate = (state: RootState): GeolocationData["coordinate"] => state.geolocation.coordinate;
-export const selectHasCoordinate = (state: RootState): GeolocationData["hasCoordinate"] =>
-  state.geolocation.hasCoordinate;
+export const selectIsEnableGeo = (state: RootState): GeolocationData["isEnableGeo"] => state.geolocation.isEnableGeo;
 
 export default geolocationSlice.reducer;
