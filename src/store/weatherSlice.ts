@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
-import { WeatherJSON } from "src/types/weather"
+import { WeatherJSON } from "src/lib/models/weather"
+import { TOKYO_WEATHER_URL } from "src/lib/urls"
 import { RootState, store } from "./store"
 
 // 型定義
@@ -30,10 +31,23 @@ export const fetchWeather = createAsyncThunk("weather/fetch", async () => {
   console.log("fetchWeather Start")
   const coordinate = store.getState().weather.coordinate
   const URL = `${process.env.NEXT_PUBLIC_OW_API_URL}/weather?lat=${coordinate.lat}&lon=${coordinate.lng}&appid=${process.env.NEXT_PUBLIC_OW_API_KEY}&units=metric`
-  const res = await axios.get(URL)
-  console.log("res.data", res.data)
+  try {
+    const res = await axios.get(URL)
+    console.log("res.data", res.data)
+    return res.data
+  } catch (error) {
+    console.log(error);
+  }
 
-  return res.data
+})
+
+// 東京の天気情報を取得
+export const fetchTokyoWeather = createAsyncThunk("weather/fetchTokyo", async () => {
+  try {
+    const res = await axios.get(TOKYO_WEATHER_URL)
+  } catch (err) {
+    console.warn(err.message)
+  }
 })
 
 export const weatherSlice = createSlice({
@@ -62,9 +76,12 @@ export const weatherSlice = createSlice({
     builder.addCase(fetchWeather.fulfilled, (state, action) => {
       state.weatherData = action.payload
     }),
-      builder.addCase(fetchWeather.fulfilled, (state, action) => {
-        console.log("error")
-      })
+    builder.addCase(fetchWeather.rejected, (error) => {
+      console.log("fetchWeather rejected", error)
+    }),
+    builder.addCase(fetchTokyoWeather.fulfilled, (state, action) => {
+      state.weatherData = action.payload
+    }),
   },
 })
 
