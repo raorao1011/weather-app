@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCoordinate, setCoordinate, setIsEnableGeo } from "src/store/geolocationSlice";
+import { selectCoordinate, setCoordinate, setIsEnableGeo } from "src/store/weatherSlice";
 import { Position } from "../types/geolocation";
 
 export const useGeolocation = () => {
