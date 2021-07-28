@@ -1,96 +1,91 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import axios from "axios"
-import { WeatherJSON } from "src/lib/models/weather"
-import { TOKYO_WEATHER_URL } from "src/lib/urls"
-import { RootState, store } from "./store"
+import axios from "axios";
+import { RootState, store } from "./store";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { WeatherJSON } from "src/lib/models/weather";
+import { TOKYO_WEATHER_URL } from "src/lib/urls";
 
-// 型定義
 type Weather = {
-  weatherData: WeatherJSON | null
-  weeklyWeatherData: any
+  weatherData: WeatherJSON | undefined;
+  weeklyWeatherData: any;
   coordinate: {
-    lat: number | null
-    lng: number | null
-  }
-  isEnableGeo: boolean | null
-}
+    lat: number | undefined;
+    lng: number | undefined;
+  };
+  isEnableGeo: boolean;
+};
 
-// 初期値
 const initialState: Weather = {
-  weatherData: null,
-  weeklyWeatherData: null,
+  weatherData: undefined,
+  weeklyWeatherData: undefined,
   coordinate: {
-    lat: null,
-    lng: null,
+    lat: undefined,
+    lng: undefined,
   },
-  isEnableGeo: null,
-}
+  isEnableGeo: false,
+};
 
 // 位置情報に合わせて天気情報を取得
 export const fetchWeather = createAsyncThunk("weather/fetch", async () => {
-  console.log("fetchWeather Start")
-  const coordinate = store.getState().weather.coordinate
-  const URL = `${process.env.NEXT_PUBLIC_OW_API_URL}/weather?lat=${coordinate.lat}&lon=${coordinate.lng}&appid=${process.env.NEXT_PUBLIC_OW_API_KEY}&units=metric`
+  const coordinate = store.getState().weather.coordinate;
+  const URL = `${process.env.NEXT_PUBLIC_OW_API_URL}/weather?lat=${coordinate.lat}&lon=${coordinate.lng}&appid=${process.env.NEXT_PUBLIC_OW_API_KEY}&units=metric`;
+
   try {
-    const res = await axios.get(URL)
-    console.log("res.data", res.data)
-    return res.data
+    const res = await axios.get(URL);
+    return res.data;
   } catch (error) {
     console.log(error);
   }
-
-})
+});
 
 // 東京の天気情報を取得
 export const fetchTokyoWeather = createAsyncThunk("weather/fetchTokyo", async () => {
   try {
-    const res = await axios.get(TOKYO_WEATHER_URL)
+    const res = await axios.get(TOKYO_WEATHER_URL);
+    return res.data;
   } catch (err) {
-    console.warn(err.message)
+    console.warn(err.message);
   }
-})
+});
 
 export const weatherSlice = createSlice({
   name: "weather",
   initialState,
   reducers: {
-    // 天気予報
+    // 天気情報
     setWeatherData: (state, action) => {
-      state.weatherData = action.payload
+      state.weatherData = action.payload;
     },
-    // 週間天気予報
+    // 週間天気情報
     setWeeklyWeatherData: (state, action) => {
-      state.weeklyWeatherData = action.payload
+      state.weeklyWeatherData = action.payload;
     },
     // 位置情報
     setCoordinate: (state, action) => {
-      state.coordinate = action.payload
+      state.coordinate = action.payload;
     },
-    // 位置情報がセットされているかどうか
     setIsEnableGeo: (state, action) => {
-      state.isEnableGeo = action.payload
+      state.isEnableGeo = action.payload;
     },
   },
-  // 非同期に天気予報を取得
   extraReducers: (builder) => {
+    /**
+     * 現在地の天気を取得
+     */
     builder.addCase(fetchWeather.fulfilled, (state, action) => {
-      state.weatherData = action.payload
-    }),
-    builder.addCase(fetchWeather.rejected, (error) => {
-      console.log("fetchWeather rejected", error)
-    }),
-    builder.addCase(fetchTokyoWeather.fulfilled, (state, action) => {
-      state.weatherData = action.payload
-    }),
+      state.weatherData = action.payload;
+    });
+    builder.addCase(fetchWeather.rejected, (e) => {
+      console.log("fetchWeather Rejected", e);
+    });
   },
-})
+});
 
-export const { setWeatherData, setWeeklyWeatherData, setCoordinate, setIsEnableGeo } = weatherSlice.actions
+export const { setWeatherData, setWeeklyWeatherData, setCoordinate, setIsEnableGeo } = weatherSlice.actions;
 
-export const selectWeatherData = (state: RootState): Weather["weatherData"] => state.weather.weatherData
+export const selectWeatherData = (state: RootState): Weather["weatherData"] => state.weather.weatherData;
 export const selectWeeklyWeatherData = (state: RootState): Weather["weeklyWeatherData"] =>
-  state.weather.weeklyWeatherData
-export const selectCoordinate = (state: RootState): Weather["coordinate"] => state.weather.coordinate
-export const selectIsEnableGeo = (state: RootState): Weather["isEnableGeo"] => state.weather.isEnableGeo
+  state.weather.weeklyWeatherData;
+export const selectCoordinate = (state: RootState): Weather["coordinate"] => state.weather.coordinate;
+export const selectIsEnableGeo = (state: RootState): Weather["isEnableGeo"] => state.weather.isEnableGeo;
 
-export default weatherSlice.reducer
+export default weatherSlice.reducer;

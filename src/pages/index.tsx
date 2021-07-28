@@ -2,50 +2,49 @@ import { useEffect } from "react";
 import { useWeatherApi } from "../hooks/useWeatherApi";
 import { useGeolocation } from "../hooks/useGeolocationApi";
 import { GoogleMaps } from "src/components/organisms/GoogleMaps";
-import { useDispatch, useSelector } from "react-redux";
-import { selectWeatherData } from "src/store/weatherSlice";
-import { selectCoordinate, selectIsEnableGeo, setCoordinate } from "src/store/geolocationSlice";
-
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || "";
+import { useSelector } from "react-redux";
+import { selectCoordinate, selectIsEnableGeo, selectWeatherData } from "src/store/weatherSlice";
+import { useGeocoding } from "../hooks/useGeocoding";
 
 export default function Home() {
-  const { getTokyoWeatherData, fetchWeatherData } = useWeatherApi();
+  const { fetchWeatherData } = useWeatherApi();
   const { fetchGeolocationData } = useGeolocation();
-  const dispatch = useDispatch();
-  const weatherInfo = useSelector(selectWeatherData);
+  const weather = useSelector(selectWeatherData);
+  const coodinate = useSelector(selectCoordinate);
   const isEnableGeo = useSelector(selectIsEnableGeo);
 
-  // 01:初期ロードで位置情報を取得
+  // 初期ロードで位置情報を取得
   useEffect(() => {
-    console.log("1");
     fetchGeolocationData();
+    // getCoords("東京");
   }, []);
 
-  // 02: 位置情報が取得できなかった場合、東京の天気を取得, else 現在地の天気を取得
+  // 現在地の天気を取得
   useEffect(() => {
-    if (isEnableGeo === false) {
-      console.log("3");
-      getTokyoWeatherData();
-    } else  {
-      console.log("3");
-      fetchWeatherData();
-    }
+    if (!isEnableGeo) return;
+
+    fetchWeatherData();
   }, [isEnableGeo]);
 
-  // 03: 取得した天気情報を表示する
+  // 取得した天気情報を表示する
   useEffect(() => {
     // 天気情報があれば実行
-    console.log(weatherInfo);
-
-    if (weatherInfo) {
-      console.log("4");
-      console.log("weatherInfo", weatherInfo);
+    if (weather) {
+      console.log("weather", weather);
     }
-  }, [weatherInfo]);
+  }, [weather]);
 
   return (
     <div className="w-screen h-screen">
-      <GoogleMaps />
+      <div className="w-80%">
+        <div>
+          <input type="text" />
+          <PrimaryButton>検索</PrimaryButton>
+        </div>
+        <div className="w-200px h-100px">
+          <GoogleMaps />
+        </div>
+      </div>
     </div>
   );
 }

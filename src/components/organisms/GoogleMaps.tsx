@@ -1,7 +1,7 @@
 import { VFC } from "react";
 import { LoadScript, GoogleMap, useLoadScript } from "@react-google-maps/api";
 import { useSelector } from "react-redux";
-import { setCoordinate } from "src/store/geolocationSlice";
+import { setCoordinate } from "src/store/weatherSlice";
 
 // 初期値：東京駅
 const InitPosition = { lat: 35.6809591, lng: 139.7673068 };
