@@ -2,7 +2,7 @@ import axios from "axios";
 import { RootState, store } from "./store";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { WeatherJSON } from "src/lib/models/weather";
-import { TOKYO_WEATHER_URL } from "src/lib/urls";
+import { ONEALLAPI_URL, TOKYO_WEATHER_URL } from "src/lib/urls";
 
 type Weather = {
   weatherData: WeatherJSON | undefined;
@@ -28,6 +28,19 @@ const initialState: Weather = {
 export const fetchWeather = createAsyncThunk("weather/fetch", async () => {
   const coordinate = store.getState().weather.coordinate;
   const URL = `${process.env.NEXT_PUBLIC_OW_API_URL}/weather?lat=${coordinate.lat}&lon=${coordinate.lng}&appid=${process.env.NEXT_PUBLIC_OW_API_KEY}&units=metric`;
+
+  try {
+    const res = await axios.get(URL);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+// 位置情報に合わせて週間天気を取得
+export const getWeeklyWeather = createAsyncThunk("weather/weekly", async () => {
+  const coordinate = store.getState().weather.coordinate;
+  const URL = `${ONEALLAPI_URL}?lat=${coordinate.lat}&lon=${coordinate.lng}&exclude=daily,hourly&appid=${process.env.NEXT_PUBLIC_OW_API_KEY}&units=metric`;
 
   try {
     const res = await axios.get(URL);
@@ -76,6 +89,9 @@ export const weatherSlice = createSlice({
     });
     builder.addCase(fetchWeather.rejected, (e) => {
       console.log("fetchWeather Rejected", e);
+    });
+    builder.addCase(getWeeklyWeather.fulfilled, (state, action) => {
+      state.weeklyWeatherData = action.payload;
     });
   },
 });
