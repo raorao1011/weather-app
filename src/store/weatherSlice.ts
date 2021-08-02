@@ -27,7 +27,7 @@ const initialState: Weather = {
 // 位置情報に合わせて天気情報を取得
 export const fetchWeather = createAsyncThunk("weather/fetch", async () => {
   const coordinate = store.getState().weather.coordinate;
-  const URL = `${process.env.NEXT_PUBLIC_OW_API_URL}/weather?lat=${coordinate.lat}&lon=${coordinate.lng}&appid=${process.env.NEXT_PUBLIC_OW_API_KEY}&units=metric`;
+  const URL = `${process.env.NEXT_PUBLIC_OW_API_URL}/weather?lat=${coordinate.lat}&lon=${coordinate.lng}&lang=ja&appid=${process.env.NEXT_PUBLIC_OW_API_KEY}&units=metric`;
 
   try {
     const res = await axios.get(URL);
@@ -40,7 +40,7 @@ export const fetchWeather = createAsyncThunk("weather/fetch", async () => {
 // 位置情報に合わせて週間天気を取得
 export const getWeeklyWeather = createAsyncThunk("weather/weekly", async () => {
   const coordinate = store.getState().weather.coordinate;
-  const URL = `${ONEALLAPI_URL}?lat=${coordinate.lat}&lon=${coordinate.lng}&exclude=daily,hourly&appid=${process.env.NEXT_PUBLIC_OW_API_KEY}&units=metric`;
+  const URL = `${ONEALLAPI_URL}?lat=${coordinate.lat}&lon=${coordinate.lng}&lang=ja&appid=${process.env.NEXT_PUBLIC_OW_API_KEY}&units=metric`;
 
   try {
     const res = await axios.get(URL);
