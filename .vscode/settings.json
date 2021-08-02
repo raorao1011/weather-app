@@ -15,8 +15,6 @@
   "files.autoSave": "afterDelay",
   // viewportで折り返す
   "editor.wordWrap": "on",
-  // 絶対パスでimport
-  "javascript.preferences.importModuleSpecifier": "non-relative",
   // typeした時にフォーマット
   "editor.formatOnType": true,
 }
